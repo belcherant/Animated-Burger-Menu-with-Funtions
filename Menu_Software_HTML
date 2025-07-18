@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator with Animated Menu</title>
+    <style>
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f2f2f2;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s, font-size 0.3s;
+        }
+
+        .calculator, .navbar, .menu, .result, .calculator h1, .calculator input, .calculator select, .calculator button {
+            font-size: 1rem;
+        }
+
+        .dark-mode {
+            background-color: #1f1f1f;
+            color:  #f2f2f2;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #4CAF50;
+            padding: 15px;
+            color: white;
+        }
+
+        .menu-icon {
+            font-size: 32px;
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .menu-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+            color: #ff6600; /* Orange on hover */
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: #4CAF50;
+            color: white;
+            padding: 0;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
+            transition: width 0.4s ease-in-out, padding 0.4s;
+        }
+
+        .menu.show {
+            width: 300px;
+            padding: 20px;
+        }
+
+        .menu h3 {
+            margin-top: 40px;
+            font-size: 26px;
+        }
+
+        .menu .close-btn {
+            font-size: 30px;
+            cursor: pointer;
+            display: block;
+            text-align: right;
+        }
+
+        .menu label, .menu input, .menu p {
+            display: block;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+
+        /* Calculator Styling */
+        .calculator {
+            background: #fff;
+            padding: 20px;
+            margin: 100px auto;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode .calculator {
+            background-color: #333;
+            color: #f2f2f2;
+        }
+
+        input[type="number"], select {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Calculator</h1>
+        <span class="menu-icon" onclick="toggleMenu()">☰</span>
+
+    </div>
+
+    <div class="menu" id="menu">
+        <h3>Dark Mode</h3>
+        <label>
+            <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()"> Activate Dark Mode
+        </label>
+
+        <h3>Font Size</h3>
+        <input type="range" id="fontSize" min="14" max="24" value="16" oninput="changeFontSize(this.value)">
+        <p id="fontValue">Current Font Size: 16px</p>
+
+        <h3>More Settings</h3>
+        <p>Coming Soon!</p>
+    </div>
+
+    <div class="calculator">
+        <input type="number" id="num1" placeholder="Enter Number"><br>
+        <input type="number" id="num2" placeholder="Enter Number"><br>
+
+        <select id="operation">
+            <option value="add">Add (+)</option>
+            <option value="subtract">Subtract (-)</option>
+            <option value="multiply">Multiply (×)</option>
+            <option value="divide">Divide (÷)</option>
+        </select><br>
+
+        <button onclick="calculate()">Calculate</button>
+
+        <div class="result" id="result">Result:</div>
+    </div>
+
+    <script>
+        // Burger Controls
+        function toggleMenu() {
+            document.getElementById('menu').classList.toggle('show');
+        }
+
+        function closeMenu() {
+            document.getElementById('menu').classList.remove('show');
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Font Control
+        function changeFontSize(size) {
+            document.documentElement.style.fontSize = size + "px"; // Adjusts all font size
+            document.getElementById('fontValue').innerText = "Current Font Size: " + size + "px";
+        }
+
+        // Calc Logic
+        function calculate() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const operation = document.getElementById('operation').value;
+            let result;
+
+            if (isNaN(num1) || isNaN(num2)) {
+                result = "Please enter valid numbers.";
+            } else {
+                switch (operation) {
+                    case "add": result = num1 + num2; break;
+                    case "subtract": result = num1 - num2; break;
+                    case "multiply": result = num1 * num2; break;
+                    case "divide": result = num2 !== 0 ? num1 / num2 : "Cannot divide by 0"; break;
+                    default: result = "Invalid operation.";
+                }
+            }
+            document.getElementById('result').innerHTML = "Result: " + result;
+        }
+    </script>
+</body>
+</html>
